@@ -21,7 +21,7 @@
 		return;
 	idPseudo = parseInt(idPseudo);
 	if(idPseudo < 3000000)
-		return;
+		return; // Pseudo trop vieux...
 	///////////////////////////
 
 	// Vérifie si le pseudo est banni
