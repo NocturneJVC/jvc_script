@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Traitement contre le cancer (anti topic "post ou...")
-// @version      1
+// @version      1.1
 // @description  N'attrapez plus le cancer !
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/*
@@ -32,7 +32,7 @@
 	document.querySelectorAll(".conteneur-topic-pagi li[data-id]").forEach(function (el) {
 		let callback = function (r) {
 			let doc = stringToHtml(r.responseText);
-			if(/post ou/.test(doc.querySelector(".bloc-message-forum[data-id]").querySelector(".txt-msg").innerHTML.toLowerCase()))
+			if(/post(e)? ou/.test(doc.querySelector(".bloc-message-forum[data-id]").querySelector(".txt-msg").innerHTML.toLowerCase()))
 			{
 				let topic_id = doc.querySelector("*[data-topic-id]").getAttribute("data-topic-id");
 				let element = document.querySelector(".conteneur-topic-pagi li[data-id='"+topic_id+"']");
