@@ -1,6 +1,6 @@
 var JVCAPI = {};
 
-JVCAPI.version = "0.2";
+JVCAPI.version = "0.2.1";
 
 JVCAPI.page = {};
 
@@ -89,7 +89,7 @@ JVCAPI.getMessages = function (link, callback) {
         });
         return posts;
     }
-    if (local) {
+    if (!local) {
         let req = new XMLHttpRequest();
         req.onreadystatechange = function (event) {
             if (this.readyState === XMLHttpRequest.DONE) {
