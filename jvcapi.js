@@ -1,6 +1,6 @@
 var JVCAPI = {};
 
-JVCAPI.version = "0.2.1";
+JVCAPI.version = "0.3";
 
 JVCAPI.page = {};
 
@@ -16,8 +16,22 @@ JVCAPI.page.is = {
     }
 };
 
+JVCAPI.topic = {};
 
-JVCAPI.getMessages = function (link, callback) {
+JVCAPI.topic.getUrlInfos = function (url) {
+    let l1, l2, l3, l4;
+    if (/http:\/\/www.jeuxvideo.com\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-/.test(url)) {
+        l1 = RegExp.$1, l2 = RegExp.$2, l3 = RegExp.$3, l4 = RegExp.$4;
+    }
+    return {
+        topicID: l3,
+        forumID: l2,
+        code: l1,
+        currentPage: l4
+    };
+};
+
+JVCAPI.topic.getMessages = function (link, callback) {
     let local = false;
     if ((typeof link === "object") && (link !== null)) {
         if (link.local === undefined || !link.local) {
