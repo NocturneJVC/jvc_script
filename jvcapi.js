@@ -1,6 +1,6 @@
 var JVCAPI = {};
 
-JVCAPI.version = "0.4";
+JVCAPI.version = "0.5";
 
 JVCAPI.page = {};
 
@@ -109,6 +109,7 @@ JVCAPI.topic.getMessages = function (link, callback) {
         return posts;
     }
     if (!local) {
+        try {
         let req = new XMLHttpRequest();
         req.onreadystatechange = function (event) {
             if (this.readyState === XMLHttpRequest.DONE) {
@@ -128,6 +129,12 @@ JVCAPI.topic.getMessages = function (link, callback) {
         };
         req.open('GET', link, true);
         req.send(null);
+    }
+    catch(e) {
+        callback({
+            error: "XMLHttpRequest error"
+        });
+    }
     } else {
         callback({
             html: document.documentElement.innerHTML,
