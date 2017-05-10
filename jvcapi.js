@@ -1,6 +1,6 @@
 var JVCAPI = {};
 
-JVCAPI.version = "0.3";
+JVCAPI.version = "0.4";
 
 JVCAPI.page = {};
 
@@ -70,7 +70,12 @@ JVCAPI.topic.getMessages = function (link, callback) {
             try {
                 avatar = el.querySelector(".bloc-avatar-msg").querySelector("img").getAttribute("data-srcset");
             } catch (e) {
-                avatar = el.querySelector(".bloc-avatar-msg").querySelector("img").getAttribute("src");
+                try {
+                    avatar = el.querySelector(".bloc-avatar-msg").querySelector("img").getAttribute("src");
+                }
+                catch(e) {
+                    avatar = "http://image.jeuxvideo.com/avatar/default.jpg";
+                }
             }
             let date = "";
             try {
