@@ -1,6 +1,6 @@
 var JVCAPI = {};
 
-JVCAPI.version = "0.1";
+JVCAPI.version = "0.1.1";
 
 JVCAPI.page = {};
 
@@ -31,6 +31,7 @@ JVCAPI.getMessages = function (link, callback) {
             callback({
                 error: "topicID manquant"
             });
+            return;
         }
         link = "http://www.jeuxvideo.com/forums/" + link.code + "-" + link.forumID + "-" + link.topicID + "-" + link.page + "-0-1-0-0.htm";
     }
