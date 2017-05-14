@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JVC Infection
 // @version      1.0
-// @description  a
+// @description  L'infection se propage
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/42-51-*
 // @grant        GM_xmlhttpRequest
