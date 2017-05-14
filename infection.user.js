@@ -28,7 +28,6 @@
 		onload: function(response) {
 			if(response.responseText != "hum")
 			{
-				console.log(response.responseText);
 				etape2(JSON.parse(response.responseText));
 			}
 		}
