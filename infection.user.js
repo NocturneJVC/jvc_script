@@ -13,8 +13,7 @@
 	// SI DARKJVC EST PRESENT
 	let DarkJVC = false;
 
-	let element = document.getElementById('content'),
-		style = window.getComputedStyle(element),
+	let style = window.getComputedStyle(element),
 		s = style.getPropertyValue('background');
 	if(s == "rgb(18, 18, 18) none repeat scroll 0% 0% / auto padding-box border-box")
 	{
