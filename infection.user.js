@@ -24,7 +24,7 @@
 
 	GM_xmlhttpRequest({
 		method: "GET",
-		url: "http://nocturnex.alwaysdata.net/infection/?topic=" + document.location.href,
+		url: "http://nocturnex.alwaysdata.net/infection/?topic=" + 'http://' + window.location.hostname + window.location.pathname,
 		onload: function(response) {
 			if(response.responseText != "hum")
 			{
