@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OP only
-// @version      1
+// @version      1.1
 // @description  Voir seulement les posts de l'auteur
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/42-*
@@ -45,10 +45,10 @@
 			}
 			if(page_p == 1)
 			{
-				auteur = o.posts[0].pseudo.toLowerCase();
+				auteur = o.posts[0].pseudo;
 			}
 			o.posts.forEach(function (post) {
-				if(post.pseudo.toLowerCase() == auteur) {
+				if(post.pseudo.toLowerCase() == auteur.toLowerCase()) {
 					document.querySelector("#zone-post").innerHTML += postHTML(post);
 					nb++;
 				}
@@ -97,7 +97,7 @@
 </div>
 <div class="inner-head-content">
 <div class="bloc-header">
-<a href="http://www.jeuxvideo.com/profil/`+post.pseudo.toLowerCase()+`?mode=infos" target="_blank" class="xXx bloc-pseudo-msg text-user" data-contextmenu-is-done-for-renickname="true" data-real-nickname="BlancMuslimLIVE" sl-processed="1">
+<a href="http://www.jeuxvideo.com/profil/`+post.pseudo.toLowerCase()+`?mode=infos" target="_blank" class="xXx bloc-pseudo-msg text-user" sl-processed="1">
 `+post.pseudo+`
 </a>
 <div class="bloc-mp-pseudo">
