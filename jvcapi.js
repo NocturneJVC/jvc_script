@@ -19,6 +19,10 @@ JVCAPI.page.is = {
 JVCAPI.topic = {};
 
 JVCAPI.topic.getUrlInfos = function (url) {
+    if(url === undefined)
+    {
+        url = document.location.href;
+    }
     let l1, l2, l3, l4;
     if (/http:\/\/www.jeuxvideo.com\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-/.test(url)) {
         l1 = RegExp.$1, l2 = RegExp.$2, l3 = RegExp.$3, l4 = RegExp.$4;
