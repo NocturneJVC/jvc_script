@@ -113,7 +113,8 @@ JVCAPI.topic.getMessages = function (link, callback) {
                 message: message,
                 signature: signature,
                 grade: el.querySelector(".text-modo") !== null ? "modo" : el.querySelector(".text-admin") !== null ? "admin" : "",
-                page: JVCAPI.stringToHtml(html).querySelector(".page-active").innerHTML.trim()
+                page: JVCAPI.stringToHtml(html).querySelector(".page-active").innerHTML.trim(),
+                ddbLink: ddbLink
             });
         });
         return posts;
