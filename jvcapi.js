@@ -99,6 +99,12 @@ JVCAPI.topic.getMessages = function (link, callback) {
             } catch (e) {
                 signature = "";
             }
+            let ddbLink = null;
+            try {
+                if(el.querySelector(".picto-msg-exclam") !== null)
+                    ddbLink = el.querySelector(".picto-msg-exclam").dataset.selector;
+            } 
+            catch (e) {}
             posts.push({
                 id: el.parentElement.getAttribute("data-id"),
                 pseudo: pseudo,
