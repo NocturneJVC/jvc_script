@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         JVC_NO_BOT
-// @version      1
+// @version      1.1
 // @description  Efface les messages et topics des bots
 // @author       NocturneX
-// @match        http://www.jeuxvideo.com/forums/42-*
-// @match        http://www.jeuxvideo.com/forums/0-*
+// @match        *://www.jeuxvideo.com/forums/42-*
+// @match        *://www.jeuxvideo.com/forums/0-*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -111,16 +111,48 @@
 			});
 			panel.init();
 			panel.update();
+			let nouveauxMessages = [];
+			addEventListener("topiclive:newmessage", function(event){
+				nouveauxMessages.push(event.detail.id);
+			});
+			addEventListener("topiclive:doneprocessing", function(){
+				nouveauxMessages.forEach(function (element, index, array){
+					let div = document.querySelector("div[data-id='"+element+"']"), pseudo = div.querySelector(".bloc-pseudo-msg").textContent.trim();
+					if(json[pseudo.toLowerCase()] !== undefined)
+					{
+						div.style.display = "none";
+						IDs.push(div.dataset.id);
+						if(pseudos.indexOf(pseudo) == -1)
+						{
+							pseudos.push(pseudo);
+						}
+						panel.update();
+					}
+				});
+				nouveauxMessages = [];
+			});
 		});
 	}
 	else if(/^http(s)?:\/\/www.jeuxvideo.com\/forums\/0-/.test(document.location.href))
 	{
-		let IDs = [], red = function (text){return`<span style="color:red">`+text+`</span>`;};
+		let IDs = [],
+			red = function (text){return`<span style="color:red">`+text+`</span>`;},
+			option_afficher = {
+				get: function () {
+					return GM_getValue("option_afficher") !== undefined ? GM_getValue("option_afficher") : 0;
+				},
+				set: function (b) {
+					GM_setValue("option_afficher", b);
+				}
+			};
 		liste_bot.get(function (json) {
 			document.querySelectorAll(".topic-author").forEach(function (div) {
 				if(json[div.textContent.trim().toLowerCase()] !== undefined)
 				{
-					div.parentNode.style.display = "none";
+					if(option_afficher.get() == 1)
+					{
+						div.parentNode.style.display = "none";
+					}
 					IDs.push(div.parentNode.dataset.id);
 					let title = div.parentNode.querySelector(".topic-subject").querySelector("a");
 					title.innerHTML = `<span style="color:red">[BOT] </span>` + title.innerHTML;
@@ -130,16 +162,30 @@
 			span.innerHTML = `
 <br>
 <h4 class="titre-info-fofo">JVC_NO_BOT</h4>
-<div id="JVC_NO_BOT_info">` + (IDs.length === 0 ? "Aucun bot détecté." : (IDs.length > 1 ? red(IDs.length) + " topics ont été effacé." : red(1) + " topic a été effacé.") + `<br><a style="cursor:pointer" id="bt_aff_topic_bot">Afficher les topics masqués</a>`) +`</div>
+<div id="JVC_NO_BOT_info">` + (IDs.length === 0 ? "Aucun bot détecté." : red(IDs.length) + " topics détectés.") +`
+<br>
+<select id="jvc_no_bot_select" style="border: blue; background-color: transparent">
+<option value="0" ` + (option_afficher.get() == "0" ? "selected" : "") + ` style="background-color: #2a2a2a">Marquer les topics des bots avec des balises [BOT]</option>
+<option value="1" ` + (option_afficher.get() == "1" ? "selected" : "") + ` style="background-color: #2a2a2a">Masquer les topics des bots</option>
+</select>
+
+
+</div>
 `;
-			if(IDs.length > 0) {
-				span.querySelector("#bt_aff_topic_bot").onclick = function () {
-					IDs.forEach(function (id) {
+			span.querySelector("#jvc_no_bot_select").onchange = function () {
+				option_afficher.set(this.value);
+				let option = this.value;
+				IDs.forEach(function (id) {
+					if(option == "0")
+					{
 						document.querySelector("*[data-id='" + id + "']").style.display = "";
-					});
-					return false;
-				};
-			}
+					}
+					else
+					{
+						document.querySelector("*[data-id='" + id + "']").style.display = "none";
+					}
+				});
+			};
 			document.querySelector(".bloc-info-forum").appendChild(span);
 		});
 	}
