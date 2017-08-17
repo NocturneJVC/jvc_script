@@ -149,7 +149,7 @@
 			document.querySelectorAll(".topic-author").forEach(function (div) {
 				if(json[div.textContent.trim().toLowerCase()] !== undefined)
 				{
-					if(option_afficher.get() == 1)
+					if(option_afficher.get() == "1")
 					{
 						div.parentNode.style.display = "none";
 					}
