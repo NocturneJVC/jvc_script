@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         JVC_NO_BOT
-// @version      1.1
+// @version      1.2
 // @description  Efface les messages et topics des bots
 // @author       NocturneX
 // @match        *://www.jeuxvideo.com/forums/42-*
@@ -162,7 +162,7 @@
 			span.innerHTML = `
 <br>
 <h4 class="titre-info-fofo">JVC_NO_BOT</h4>
-<div id="JVC_NO_BOT_info">` + (IDs.length === 0 ? "Aucun bot détecté." : red(IDs.length) + " topics détectés.") +`
+<div id="JVC_NO_BOT_info">` + (IDs.length === 0 ? "Aucun bot détecté." : red(IDs.length) + " topics bot détectés.") +`
 <br>
 <select id="jvc_no_bot_select" style="border: blue; background-color: transparent">
 <option value="0" ` + (option_afficher.get() == "0" ? "selected" : "") + ` style="background-color: #2a2a2a">Marquer les topics des bots avec des balises [BOT]</option>
