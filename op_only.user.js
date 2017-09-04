@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OP only
-// @version      1.1
+// @version      1.1.1
 // @description  Voir seulement les posts de l'auteur
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/42-*
@@ -106,7 +106,7 @@
 </a>
 </div>
 <div class="bloc-options-msg"> </div>                    <div class="bloc-date-msg">
-<a href="/`+post.pseudo.toLowerCase()+`/forums/message/`+post.id+`" target="_blank" class="xXx lien-jv" sl-processed="1">`+post.date+`</a> / Page original: `+post.page+`
+<a href="/`+post.pseudo.toLowerCase()+`/forums/message/`+post.id+`" target="_blank" class="xXx lien-jv" sl-processed="1">`+post.date+`</a> / Page originale: `+post.page+`
 </div>
 </div>
 <div class="bloc-contenu"><div class="txt-msg  text-enrichi-forum ">`+post.message+`</div>
