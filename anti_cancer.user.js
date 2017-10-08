@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Traitement contre le cancer (anti topic "post ou...")
-// @version      1.1
+// @version      2.0
 // @description  N'attrapez plus le cancer !
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/*
@@ -8,6 +8,8 @@
 // @grant        GM_xmlhttpRequest
 // @icon         http://image.noelshack.com/fichiers/2016/36/1473604760-picsart-09-03-11-39-59.jpg
 // ==/UserScript==
+
+// MÀJ 2.0: prend maintenant en compte le sujet (exemple: sujet "cette meuf à la post", message "ou cancer :)" sera détecté)
 
 (function() {
 	'use strict';
@@ -27,12 +29,18 @@
 
 
 
+
 	if(document.querySelector(".conteneur-topic-pagi li[data-id]") === null)
 		return;
 	document.querySelectorAll(".conteneur-topic-pagi li[data-id]").forEach(function (el) {
 		let callback = function (r) {
+			let sujetPost = false;
+			if(/pos(t|te|té|tez)(")?$/.test(el.querySelector(".topic-title").title.toLowerCase()))
+			{
+				sujetPost = true;
+			}
 			let doc = stringToHtml(r.responseText);
-			if(/post(e)? ou/.test(doc.querySelector(".bloc-message-forum[data-id]").querySelector(".txt-msg").innerHTML.toLowerCase()))
+			if(/pos(t|te|té|tez) ou/.test(doc.querySelector(".bloc-message-forum[data-id]").querySelector(".txt-msg").innerHTML.toLowerCase()) || (sujetPost && /^<p>( )?ou/.test(doc.querySelector(".bloc-message-forum[data-id]").querySelector(".txt-msg").innerHTML.toLowerCase())))
 			{
 				let topic_id = doc.querySelector("*[data-topic-id]").getAttribute("data-topic-id");
 				let element = document.querySelector(".conteneur-topic-pagi li[data-id='"+topic_id+"']");
@@ -46,7 +54,6 @@
 					element.remove();
 				}
 			}
-			console.log("ok "+el.dataset.id);
 		};
 		GM_xmlhttpRequest({
 			method: "GET",
