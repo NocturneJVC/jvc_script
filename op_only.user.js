@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OP only
-// @version      1.1.1
+// @version      1.2
 // @description  Voir seulement les posts de l'auteur
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/42-*
@@ -118,7 +118,15 @@
 	{
 		document.querySelectorAll(".bloc-contenu").forEach(function (a) {
 			a.querySelectorAll(".JvCare").forEach(function(o){
-				o.innerHTML = `<a href="${o.title ? o.title : o.innerHTML}" target="_blank">${o.innerHTML}</a>`;
+				let miniature = o.querySelector(".img-shack");
+				if(miniature !== null)
+				{
+					o.innerHTML = `<a href="${miniature.alt ? miniature.alt : miniature.src}" target="_blank">${o.innerHTML}</a>`;
+				}
+				else
+				{
+					o.innerHTML = `<a href="${o.title ? o.title : o.innerHTML}" target="_blank">${o.innerHTML}</a>`;
+				}
 			});
 		});
 	}
