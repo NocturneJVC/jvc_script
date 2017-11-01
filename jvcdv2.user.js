@@ -7,7 +7,7 @@
 // @match        https://www.jeuxvideo.com/profil/*
 // @grant        GM_xmlhttpRequest
 // @require      http://web.archive.org/web/20160330121012/http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/hmac-sha256.js
-// @updateURL    .
+// @updateURL    https://github.com/NocturneJVC/jvc_script/raw/master/jvcdv2.user.js
 // @connect      api.jeuxvideo.com
 // ==/UserScript==
 
