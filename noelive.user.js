@@ -8,6 +8,8 @@
 // @grant        GM_xmlhttpRequest
 // @connect      avenoel.org
 // @icon         http://image.noelshack.com/fichiers/2017/34/1/1503324934-risitas-rire1.png
+// @updateURL    https://github.com/NocturneJVC/jvc_script/raw/master/noelive.user.js
+// @downloadURL  https://github.com/NocturneJVC/jvc_script/raw/master/noelive.user.js
 // ==/UserScript==
 
 (function() {
