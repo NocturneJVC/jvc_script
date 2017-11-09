@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Liberté d'expression
-// @version      1
-// @description  Cache des messages dans des stickers, résistance !
+// @version      1.1
+// @description  Encode des messages dans des stickers
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/*
 // @grant        GM_xmlhttpRequest
@@ -95,29 +95,38 @@
 			{
 				message = prompt("Erreur ! Le message doit faire moins de 100 caractères, message à encoder:", message);
 			}
-			let img = new Image();   // Crée un nouvel élément Image
-			img.src = stickers[Math.floor(Math.random()*stickers.length)];
-			img.crossorigin = "anonymous";
-			img.onload = function() {
-				let canv = document.createElement('canvas');
-				canv.width = img.width;
-				canv.height = img.height;
-				let context = canv.getContext("2d");
-				context.fillStyle = "white";
-				context.fillRect(0, 0, img.width, img.height);
-				context.drawImage(img, 0, 0);
-				let file = dataURLtoFile(canv.toDataURL("image/png"), "xpr" + message.hexEncode() + ".png");
-				fileToNoelshack(file, function (lien) {
-					if(/noelshack/.test(lien))
-					{
-						document.querySelector("#message_topic").value += lien;
-					}
-					else
-					{
-						alert("Une erreur est survenue !");
-					}
-				});
-			};
+			bt.querySelector("a").innerHTML = "<br>Chargement...";
+			function ci () {
+				let img = new Image();   // Crée un nouvel élément Image
+				img.src = stickers[Math.floor(Math.random()*stickers.length)];
+				img.crossorigin = "anonymous";
+				img.onload = function() {
+					let canv = document.createElement('canvas');
+					canv.width = img.width;
+					canv.height = img.height;
+					let context = canv.getContext("2d");
+					context.fillStyle = "white";
+					context.fillRect(0, 0, img.width, img.height);
+					context.drawImage(img, 0, 0);
+					let file = dataURLtoFile(canv.toDataURL("image/png"), "xpr" + message.hexEncode() + ".png");
+					fileToNoelshack(file, function (lien) {
+						if(/noelshack/.test(lien))
+						{
+							document.querySelector("#message_topic").value += " " + lien;
+						}
+						else
+						{
+							alert("Une erreur est survenue !");
+						}
+						bt.querySelector("a").innerHTML = "Créer un message encodé dans un sticker";
+					});
+				};
+				img.onerror = function () {
+					console.log("erreur on recommence")
+					ci ();
+				};
+			}
+			ci();
 			return false;
 		};
 	}
