@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         JVC Mosaïque to Image
-// @version      2
+// @version      2.1
 // @description  Transforme les mosaïques en image
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/42-*
@@ -38,6 +38,7 @@
 </div>
 `;
 		c.innerHTML = html;
+		document.title = "Convertir une mosaique en image";
 		let occupe = false;
 		let stk_size = {w:68,h:51};
 		document.querySelector("#mtivalider").onclick = function () {
