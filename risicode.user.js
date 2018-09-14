@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         RisiCode
-// @version      1.0
+// @version      1.1
 // @description  Utilisez vos stickers plus rapidement !
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/*
@@ -8,16 +8,14 @@
 // @downloadURL  https://github.com/NocturneJVC/jvc_script/raw/master/risicode.user.js
 // @updateURL    https://github.com/NocturneJVC/jvc_script/raw/master/risicode.meta.js
 // @grant        GM_setValue
-// @grant        GM.setValue
 // @grant        GM_getValue
-// @grant        GM.getValue
 // @grant        GM_xmlhttpRequest
-// @grant        GM.xmlhttpRequest
 // @connect      risibank.fr
 // ==/UserScript==
 
-// Pour effectuer les recherches de sticker, RisiCode utilise le site risibank.fr
-// Pour accélérer l'affiche des stickers de la partie "Recherche Risibank", RisiCode utilise les images du site jvsticker.com
+// Le script n'est pas compatible avec Greasemonkey. Utilisez Tampermonkey pour installez vos scripts.
+// Pour effectuer les recherches de sticker, RisiCode utilise le site risibank.fr de la Team Risibank.
+// Pour accélérer l'affiche des stickers de la partie "Recherche Risibank", RisiCode utilise les images du site jvsticker.com de Alexandre.
 
 new class RisiCode {
 
@@ -444,7 +442,7 @@ new class RisiCode {
 
 	htmlStickersPerso () {
 		let html = `<div style="margin-bottom: 5px; border-bottom: 1px solid; padding-bottom: 5px; font-size: 1.2em;">Mes stickers <span style="float: right;"><a style="cursor: pointer" id="bt-gerer">[Gérer]</a> <a style="cursor: pointer" data-str-1="[Afficher]" data-str-2="[Masquer]" id="toggle-stksprs">[Afficher]</a></span></div>`;
-		html    += `<div id="stksprs" style="cursor: auto; display: none; flex-wrap: wrap; justify-content: space-between;">`;
+		html    += `<div id="stksprs" style="cursor: auto; display: none; flex-wrap: wrap; justify-content: start;">`;
 
 		for(let perso of this.stickersPerso)
 		{
@@ -654,6 +652,7 @@ new class RisiCode {
     }
 
 	// Partie "fonctions userscript":
+    // NOTE: J'ai voulu rendre le script compatible avec Greasemonkey mais il me pose trop de problème à cause de leur système de "Promise" et j'ai la flemme de continuer. Je préfère Tampermonkey.
 
 	_getValue (key, defaultval) {
 		let r = null;
