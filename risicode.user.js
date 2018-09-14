@@ -16,6 +16,9 @@
 // @connect      risibank.fr
 // ==/UserScript==
 
+// Pour effectuer les recherches de sticker, RisiCode utilise le site risibank.fr
+// Pour accélérer l'affiche des stickers de la partie "Recherche Risibank", RisiCode utilise les images du site jvsticker.com
+
 new class RisiCode {
 
 	constructor () {
@@ -625,7 +628,7 @@ new class RisiCode {
 
     htmlDivStickerRisibank (sticker) {
         return `<div id="risibank-sticker-${sticker.id}" style="margin: 5px;  display: inline-block; min-width: 6%; padding:  5px;border: 1px dashed;border-radius:  3px; cursor: pointer" class="risicode-bt-risibank" data-stk="${sticker.image_noelshack}">
-                          <div style="width: 100%; display: block; text-align: center; margin: 0"><img onerror="this.parentNode.parentNode.remove()" src="${sticker.image_jvsticker}" width="64px" title="${sticker.tags}"></div>
+                          <div style="width: 100%; display: block; text-align: center; margin: 0"><img onerror="this.onerror = function () {this.parentNode.parentNode.remove()};this.src='${sticker.image_noelshack}';" src="${sticker.image_jvsticker}" width="64px" title="${sticker.tags}"></div>
                           <div style="width: 100%; display: block; text-align: center; margin: 0">:rid ${sticker.id}:</div>
                      </div>`;
     }
