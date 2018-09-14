@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         RisiCode
-// @version      1.0
+// @version      1.1
 // @description  Utilisez vos stickers plus rapidement !
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/*
@@ -8,10 +8,7 @@
 // @downloadURL  https://github.com/NocturneJVC/jvc_script/raw/master/risicode.user.js
 // @updateURL    https://github.com/NocturneJVC/jvc_script/raw/master/risicode.meta.js
 // @grant        GM_setValue
-// @grant        GM.setValue
 // @grant        GM_getValue
-// @grant        GM.getValue
 // @grant        GM_xmlhttpRequest
-// @grant        GM.xmlhttpRequest
 // @connect      risibank.fr
 // ==/UserScript==
