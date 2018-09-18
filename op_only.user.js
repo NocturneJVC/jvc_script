@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OP only
-// @version      1.2
+// @version      1.3
 // @description  Voir seulement les posts de l'auteur
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/42-*
@@ -30,7 +30,7 @@
 		}
 		if(page_p > page_last)
 		{
-			document.querySelector("#op-progress").innerHTML = "Récupération des messages de l'auteur terminé (nb: "+nb+").";
+			document.querySelector("#op-progress").innerHTML = "Récupération des messages de l'auteur terminée (nb: "+nb+").";
 			JVCAREtoLINK();
 			return;
 		}
@@ -77,7 +77,7 @@
 			};
 			g.appendChild(bt);
 		});
-		GM_addStyle(`@import url('https://fonts.googleapis.com/css?family=ABeeZee');#op-progress{font-family: 'ABeeZee', sans-serif;text-align: center; font-size: 1.2em;}`);
+		GM_addStyle(`#op-progress{text-align: center; font-size: 1.2em;}`);
 
 	}
 
