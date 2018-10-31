@@ -13,8 +13,8 @@
 // @connect      risibank.fr
 // ==/UserScript==
 
-// Le script n'est pas compatible avec Greasemonkey. Utilisez Tampermonkey pour installez vos scripts.
-// Pour effectuer les recherches de sticker, RisiCode utilise le site risibank.fr de la Team Risibank.
+// Le script n'est pas compatible avec Greasemonkey. Utilisez Tampermonkey pour installer vos scripts.
+// Pour effectuer les recherches de sticker, RisiCode utilise le site risibank.fr .
 // Pour accélérer l'affiche des stickers de la partie "Recherche Risibank", RisiCode utilise les images du site jvsticker.com de Alexandre.
 
 new class RisiCode {
@@ -23,7 +23,7 @@ new class RisiCode {
 		this.pushStickersWebedia();
 		this.pushStickersPerso();
 		this.listener();
-		this.toolBar();
+		this.textareaBar();
 	}
 
 	// Partie "textarea":
@@ -296,7 +296,7 @@ new class RisiCode {
 
 	// Partie "GUI":
 
-	toolBar () {
+	textareaBar () {
 		let div = document.createElement("div");
 		div.innerHTML = `<button class="btn btn-jv-editor-toolbar" type="button" title="RisiCode" style="font-family: monospace;padding: 0;" id="risicode-bt-tb">:RisiCode:</button>`;
 		div.classList.add("btn-group");
