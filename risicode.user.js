@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         RisiCode
-// @version      1.1
+// @version      1.2
 // @description  Utilisez vos stickers plus rapidement !
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/*
-// @icon         http://image.noelshack.com/fichiers/2017/48/7/1512337389-renardban17.png
+// @icon         http://image.noelshack.com/fichiers/2018/48/5/1543610393-logo.png
 // @downloadURL  https://github.com/NocturneJVC/jvc_script/raw/master/risicode.user.js
 // @updateURL    https://github.com/NocturneJVC/jvc_script/raw/master/risicode.meta.js
 // @grant        GM_setValue
