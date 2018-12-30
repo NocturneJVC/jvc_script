@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         JVCDV 2
-// @version      2.1
+// @version      2.2
 // @description  Voir les profils des comptes bannis !
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/profil/*
@@ -689,10 +689,12 @@
 		{
 			a.badges = [];
 			json.badges.forEach(function(el){
-				a.badges.push({
-					image : badges[el].src,
-					titre : badges[el].nom
-				});
+                if(badges[el]) {
+                    a.badges.push({
+                        image : badges[el].src,
+                        titre : badges[el].nom
+                    });
+                }
 			});
 		}
 		afficher(a);
