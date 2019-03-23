@@ -166,6 +166,8 @@ new class RisiCode {
 		if(!/:([A-zÀ-ú0-9 ]+):/.test(code)) {
 			return {e: false, s: "Le code doit commencer et finir par des doubles points \":\" et doit contenir uniquement des lettres, des chiffres et des espaces."};
 		}
+
+        text = text.trim();
 		data.push([code, text, Date.now()]);
 		this.setStickersPerso(data);
 		return {e: true, s: "Raccourci ajouté."};
@@ -199,8 +201,7 @@ new class RisiCode {
 			[":risitas:", "http://image.noelshack.com/fichiers/2016/24/1466366197-risitas10.png", 1+t],
 			[":jesus pose:", "http://image.noelshack.com/fichiers/2016/26/1467335935-jesus1.png", 2+t],
 			[":chancla:", "http://image.noelshack.com/fichiers/2016/36/1473263957-risitas33.png", 3+t],
-			[":sourire:", "http://image.noelshack.com/fichiers/2017/10/1489162412-1465686632-jesuus-risitas.gif", 4+t],
-			[":larry:", "http://image.noelshack.com/fichiers/2017/04/1485484836-larry.png", 5+t]
+			[":sourire:", "http://image.noelshack.com/fichiers/2017/10/1489162412-1465686632-jesuus-risitas.gif", 4+t]
 		]));
 	}
 
