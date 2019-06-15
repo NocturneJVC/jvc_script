@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Anti-Mosaïque
-// @version      1.0
+// @version      1.1
 // @description  Masque les mosaïques générés avec http://nocturnex.alwaysdata.net/mosajax/
 // @author       NocturneX
 // @match        *://www.jeuxvideo.com/forums/1-*
@@ -25,8 +25,7 @@
     for (let mosaique_id of Object.keys(mosaiques)) {
         if (mosaiques[mosaique_id].length >= NB_MINIATURE_MINIMUM) {
             for (let src of mosaiques[mosaique_id]) {
-                let img = document.querySelector("img[src='" + src + "']")
-                if (img) {
+                for (let img of document.querySelectorAll("img[src='" + src + "']")) {
                     if (/-1-[a-z0-9]{8}\.(png|gif)$/.test(src)) {
                         img.parentElement.outerHTML = `<span style="color:purple">Mosaïque #${mosaique_id} masquée</span>`
                     } else {
