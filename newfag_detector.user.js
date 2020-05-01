@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Newfag detecor
-// @version      1.0
+// @version      1.1
 // @description  Affiche l'ancienneté des pseudos qui le cachent
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/profil/*?mode=infos
@@ -14,11 +14,16 @@
 (function() {
 	const PSEUDO_AVANT = 0, PSEUDO_APRES = 1;
 	// Récupère l'ID du pseudo
-	let idPseudo = document.querySelector(".picto-attention").getAttribute("data-selector");
-	if(/\/profil\/gta\.php\?id=([0-9]+)&/g.test(idPseudo))
-		idPseudo = RegExp.$1;
-	else
-		return;
+    var iconBell = document.querySelector(".icon-bell-off")
+    if(!iconBell) {
+        if(document.querySelector(".icon-bell-on")) {
+            console.error("[Newfag detector] Impossible de récupérer l'ID du pseudo. Désabonnez vous au pseudo pour régler le problème, vous pourrez vous réabonner juste après si vous le souhaitez.");
+        }
+        return;
+    }
+
+    var idPseudo = iconBell.getAttribute("data-id");
+
 	idPseudo = parseInt(idPseudo);
 	if(idPseudo < 3000000)
 		return; // Pseudo trop vieux...
