@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         JVCDV 2
-// @version      2.2
+// @version      2.3
 // @description  Voir les profils des comptes bannis !
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/profil/*
@@ -50,11 +50,19 @@
 	if(msg_ban === null) return;
 	if(msg_ban.innerHTML.trim() != "Le pseudo est banni.") return;
 
-	var idPseudo = document.querySelector(".picto-attention").getAttribute("data-selector");
-	if(/\/profil\/gta\.php\?id=([0-9]+)&/g.test(idPseudo))
-		idPseudo = RegExp.$1;
-	else
-		return;
+    var iconBell = document.querySelector(".icon-bell-off")
+    if(!iconBell) {
+        if(document.querySelector(".icon-bell-on")) {
+            let div = document.createElement("div")
+            div.style.textAlign = "center";
+            div.style.fontSize = "0.85em";
+            div.innerHTML = "[JVCDV] Impossible de récupérer l'ID du pseudo. Désabonnez vous au pseudo pour régler le problème, vous pourrez vous réabonner juste après si vous le souhaitez.";
+            document.querySelectorAll(".col-md-12")[1].appendChild(div);
+        }
+        return;
+    }
+
+    var idPseudo = iconBell.getAttribute("data-id");
 
 	if(idPseudo === "") return;
 	///////////////////////////
