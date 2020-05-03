@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Newfag detecor
-// @version      1.1
+// @version      1.2
 // @description  Affiche l'ancienneté des pseudos qui le cachent
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/profil/*?mode=infos
@@ -14,16 +14,23 @@
 (function() {
 	const PSEUDO_AVANT = 0, PSEUDO_APRES = 1;
 	// Récupère l'ID du pseudo
-    var iconBell = document.querySelector(".icon-bell-off")
-    if(!iconBell) {
-        if(document.querySelector(".icon-bell-on")) {
-            console.error("[Newfag detector] Impossible de récupérer l'ID du pseudo. Désabonnez vous au pseudo pour régler le problème, vous pourrez vous réabonner juste après si vous le souhaitez.");
-        }
-        return;
+    var idPseudo = 0;
+    // Si le bouton d'abonnement existe, on récupère l'id du pseudo dedans
+    // Sinon si le bouton de DDB existe, on récupère l'id du pseudo dedans
+    // Sinon on arrête le script
+    var iconBell = document.querySelector(".icon-bell-off");
+    if(iconBell) {
+        idPseudo = iconBell.getAttribute("data-id")
     }
-
-    var idPseudo = iconBell.getAttribute("data-id");
-
+    else {
+        let pictoAttention = document.querySelector(".picto-attention");
+        if(pictoAttention && /\/profil\/gta\.php\?id=([0-9]+)&/g.test(pictoAttention.getAttribute("data-selector"))) {
+            idPseudo = RegExp.$1;
+        } else if(document.querySelector(".icon-bell-on")) {
+            console.error("[Newfag detector] Impossible de récupérer l'ID du pseudo.");
+            return;
+        }
+    }
 	idPseudo = parseInt(idPseudo);
 	if(idPseudo < 3000000)
 		return; // Pseudo trop vieux...
