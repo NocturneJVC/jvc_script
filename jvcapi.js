@@ -24,7 +24,7 @@ JVCAPI.topic.getUrlInfos = function (url) {
         url = document.location.href;
     }
     let l1, l2, l3, l4;
-    if (/http:\/\/www.jeuxvideo.com\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-/.test(url)) {
+    if (/https?:\/\/www.jeuxvideo.com\/forums\/([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-/.test(url)) {
         l1 = RegExp.$1, l2 = RegExp.$2, l3 = RegExp.$3, l4 = RegExp.$4;
     }
     return {
@@ -54,7 +54,7 @@ JVCAPI.topic.getMessages = function (link, callback) {
                 });
                 return;
             }
-            link = "http://www.jeuxvideo.com/forums/" + link.code + "-" + link.forumID + "-" + link.topicID + "-" + link.page + "-0-1-0-0.htm";
+            link = "https?://www.jeuxvideo.com/forums/" + link.code + "-" + link.forumID + "-" + link.topicID + "-" + link.page + "-0-1-0-0.htm";
         } else {
             local = true;
         }
@@ -78,7 +78,7 @@ JVCAPI.topic.getMessages = function (link, callback) {
                     avatar = el.querySelector(".bloc-avatar-msg").querySelector("img").getAttribute("src");
                 }
                 catch(e) {
-                    avatar = "http://image.jeuxvideo.com/avatar/default.jpg";
+                    avatar = "https://image.jeuxvideo.com/avatar/default.jpg";
                 }
             }
             let date = "";
