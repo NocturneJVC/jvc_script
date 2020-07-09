@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         OP only
-// @version      1.3
+// @version      1.4
 // @description  Voir seulement les posts de l'auteur
 // @author       NocturneX
 // @match        http://www.jeuxvideo.com/forums/42-*
+// @match        https://www.jeuxvideo.com/forums/42-*
 // @match        http://www.jeuxvideo.com/forums/1-*
+// @match        https://www.jeuxvideo.com/forums/1-*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @icon         http://image.noelshack.com/fichiers/2017/25/7/1498400760-puma-prepa-gif.gif
