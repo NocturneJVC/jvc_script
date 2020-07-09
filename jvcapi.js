@@ -54,7 +54,7 @@ JVCAPI.topic.getMessages = function (link, callback) {
                 });
                 return;
             }
-            link = "https?://www.jeuxvideo.com/forums/" + link.code + "-" + link.forumID + "-" + link.topicID + "-" + link.page + "-0-1-0-0.htm";
+            link = "https://www.jeuxvideo.com/forums/" + link.code + "-" + link.forumID + "-" + link.topicID + "-" + link.page + "-0-1-0-0.htm";
         } else {
             local = true;
         }
