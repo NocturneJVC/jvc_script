@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         JVC Colorful Followers
-// @version      1.0
+// @version      1.1
 // @description  Colore les pseudos qui vous suivent et que vous suivez
 // @author       NocturneX
 // @icon         https://image.noelshack.com/fichiers/2019/28/6/1563019174-1406836919770.gif
@@ -8,8 +8,6 @@
 // @match        *://www.jeuxvideo.com/forums/1-*
 // @match        *://www.jeuxvideo.com/forums/42-*
 // @match        *://www.jeuxvideo.com/recherche/forums/0-*
-// @grant        GM_setValue
-// @grant        GM_getValue
 // @grant        GM_addStyle
 // ==/UserScript==
 
