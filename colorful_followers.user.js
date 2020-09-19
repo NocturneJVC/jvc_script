@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         JVC Colorful Followers
-// @version      1.1
+// @version      1.2
 // @description  Colore les pseudos qui vous suivent et que vous suivez
 // @author       NocturneX
 // @icon         https://image.noelshack.com/fichiers/2019/28/6/1563019174-1406836919770.gif
@@ -22,7 +22,7 @@
         GM_addStyle(
             `.colorful-abonne { color: #0b25e1 !important; }` +
             `.colorful-abonnement { color: #e97c0b !important; }` +
-            `.colorful-abonne-et-abonnement { color: #293fe1 !important; text-shadow: 0px 0px 4px #01ffad; padding: 0 2px; }`
+            `.colorful-abonne-et-abonnement { color: #ff00a5 !important; }`
         )
 
     } else {
@@ -31,7 +31,7 @@
         GM_addStyle(
             `.colorful-abonne { color: #71b0dc !important; }` +
             `.colorful-abonnement { color: #c68139 !important; }` +
-            `.colorful-abonne-et-abonnement { color: #e7e7e7 !important; text-shadow: 0px 0px 4px #01ffad; padding: 0 2px; }`
+            `.colorful-abonne-et-abonnement { color: #eb39ac !important; }`
         )
 
     }
