@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Traitement contre le cancer (anti topic "post ou...")
-// @version      2.1
+// @version      2.1.1
 // @description  N'attrapez plus le cancer !
 // @author       NocturneX
-// @match        http://www.jeuxvideo.com/forums/*
-// @match        http://www.jeuxvideo.com/recherche/forums/*
+// @match        *://www.jeuxvideo.com/forums/*
+// @match        *://www.jeuxvideo.com/recherche/forums/**
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getValue
 // @grant        GM_setValue
