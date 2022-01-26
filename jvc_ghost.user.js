@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         JVC Ghost
-// @version      0.1
+// @version      0.2
 // @description  Affiche les messages qui ont été 410 (fonctionne uniquement sur le 18-25)
 // @author       NocturneX
 // @match        *://www.jeuxvideo.com/forums/*
@@ -8,6 +8,12 @@
 // @grant        GM_xmlhttpRequest
 // @connect      jvarchive.com
 // ==/UserScript==
+
+
+// v0.2: fix l'affichage des posts supprimés sur mobile suite à la refonte de jvc
+//       fix l'affichage des avatars supprimés (affiche l'avatar default)
+//       affiche les pseudo supprimés à partir des données retournées par jvarchive
+//       fix le problème des faux positifs causés par des PEMT sur deux pages
 
 (async function() {
     'use strict';
@@ -22,7 +28,7 @@
     const blacklist = /(cigarette\d+|exampleDePseudo|exampleDePseudo2)/i;
 
     let lastPage = 1
-    for (let span of document.querySelectorAll('#forum-main-col .bloc-liste-num-page > span')) {
+    for (const span of document.querySelectorAll('#forum-main-col .bloc-liste-num-page > span')) {
         const num = parseInt(span.textContent.trim());
         if (num != NaN && num > lastPage) {
             lastPage = num;
@@ -30,19 +36,19 @@
     }
 
     const posts = {
-        all () {
-            return Array.from(document.querySelectorAll('.bloc-message-forum')).map((el) => {
-                return {
-                    el,
-                    id: parseInt(el.getAttribute('data-id'))
-                }
-            });
+        get all () {
+            return Array.from(document.querySelectorAll('.bloc-message-forum')).map((el) => ({
+                el,
+                id: parseInt(el.getAttribute('data-id')),
+                pseudoElement: el.querySelector('.bloc-pseudo-msg'),
+                dateElement: el.querySelector('.bloc-date-msg')
+            }));
         },
-        first () {
-            return this.all()[0]
+        get first () {
+            return this.all[0]
         },
-        last () {
-            const posts = this.all();
+        get last () {
+            const posts = this.all;
             return posts[posts.length - 1];
         },
         createIfNotExist (id, auteur, date, text, docNextPage) {
@@ -71,8 +77,7 @@
                 date = `${('0' + date.getDate()).slice(-2)} ${month} ${date.getFullYear()} à ${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}:${('0' + date.getSeconds()).slice(-2)}`
 
                 const div = document.createElement('div');
-                div.classList.add('bloc-message-forum');
-                div.classList.add('msg-supprime');
+                div.classList.add('bloc-message-forum', 'msg-supprime', 'mx-2', 'mx-lg-0');
                 div.setAttribute('data-id', id);
                 div.innerHTML = `
                                  <div class="conteneur-message">
@@ -80,8 +85,7 @@
                                          <div class="back-img-msg">
                                              <div>
                                                  <a href="https://www.jeuxvideo.com/profil/${auteur.pseudo.toLowerCase()}?mode=infos" target="_blank" class="xXx ">
-                                                     <img src="${auteur.avatar}"
-                                                         class="user-avatar-msg" alt="${auteur.pseudo}">
+                                                     <img src="${auteur.avatar}" class="user-avatar-msg" alt="${auteur.pseudo}">
                                                  </a>
                                              </div>
                                          </div>
@@ -95,7 +99,7 @@
                                              <div class="bloc-mp-pseudo">
                                                  <a href="https://www.jeuxvideo.com/messages-prives/nouveau.php?all_dest=${auteur.pseudo}"
                                                      target="_blank" class="xXx ">
-                                                     <span class="picto-msg-lettre" title="Envoyer un message privé"><span>MP</span></span>
+                                                     <span class="picto-msg-lettre icon-pm" title="Envoyer un message privé"><span>MP</span></span>
                                                  </a>
                                              </div>
                                              <div class="bloc-date-msg">
@@ -104,7 +108,7 @@
                                          </div>
                                          <div class="bloc-contenu">
                                              <div class="txt-msg  text-enrichi-forum ">
-                                                                              ${text}
+                                                 ${text}
                                              </div>
                                          </div>
                                      </div>
@@ -114,10 +118,10 @@
                     const text = div.querySelector('.txt-msg');
                     text.innerHTML = `<p>${text.innerHTML}</p>`;
                 }
-                for (let blockquote of div.querySelectorAll('blockquote')) {
+                for (const blockquote of div.querySelectorAll('blockquote')) {
                     blockquote.classList.add('blockquote-jv');
                 }
-                for (let blockquote of div.querySelectorAll('.txt-msg blockquote blockquote')) {
+                for (const blockquote of div.querySelectorAll('.txt-msg blockquote blockquote')) {
                     const nested = document.createElement('div');
                     nested.classList.add('nested-quote-toggle-box');
                     nested.onclick = () => {
@@ -141,13 +145,46 @@
                     d.parentNode.appendChild(a);
                 }
 
-                let before = this.all().find((element, index, array) => {
-                    const next = array[index + 1];
-                    return (!next || (id > element.id && id < next.id));
-                }) || this.last();
+                const avatarElement = div.querySelector('.user-avatar-msg');
+                avatarElement.onerror = () => {
+                    avatarElement.src = 'https://image.jeuxvideo.com/avatar-sm/default.jpg';
+                    avatarElement.onerror = null;
+                };
+
+                let before;
+                let position;
+                this.all.forEach((post, index, array) => {
+                    if (before) return;
+                    const nextPost = array[index + 1];
+                    if (!nextPost || (id > post.id && id < nextPost.id)) {
+                        position = index;
+                        before = post;
+                    }
+                });
+
+                if (position === 0 && before && before.dateElement.textContent.trim() === date) {
+                    return;
+                }
+
+                if (!before) {
+                    before = this.last;
+                }
 
                 before.el.parentNode.insertBefore(div, before.el.nextSibling);
             }
+        },
+        guessPseudoDeleted(id, pseudoFromArchive) {
+            if (!pseudoFromArchive) return;
+
+            const post = this.all.find((post) => post.id === id);
+
+            if (!post || post.pseudoElement.textContent.trim() !== 'Pseudo supprimé') return;
+
+            console.log('JVC Ghost post', post.id, 'remplace pseudo supprimé par', pseudoFromArchive);
+
+            post.pseudoElement.innerHTML = pseudoFromArchive;
+            post.pseudoElement.setAttribute('style', 'text-decoration-line: line-through;');
+            post.pseudoElement.title = 'Pseudo supprimé';
         }
     };
 
@@ -169,12 +206,10 @@
             });
         },
         topic (type, id, page, slug) {
-            return this.request(`/forums/${type}-51-${id}-${page}-0-1-0-${slug}.htm`).then(doc => {
-                return {
-                    firstPostId: parseInt(doc.querySelector('.bloc-message-forum').getAttribute('data-id')),
-                    doc
-                };
-            });
+            return this.request(`/forums/${type}-51-${id}-${page}-0-1-0-${slug}.htm`).then(doc => ({
+                firstPostId: parseInt(doc.querySelector('.bloc-message-forum').getAttribute('data-id')),
+                doc
+            }));
         }
     };
 
@@ -222,7 +257,7 @@
             let first = null;
             let last = null;
             const addPosts = (response) => {
-                for (let post of response.messages) {
+                for (const post of response.messages) {
                     if (first === null || first > post.id) {
                         first = post.id;
                     }
@@ -276,7 +311,7 @@
 
 
     try {
-        const firstPostId = posts.first().id;
+        const firstPostId = posts.first.id;
         let lastPostId = null;
 
         let nextPage;
@@ -289,7 +324,10 @@
 
         console.log('JVC Ghost archives:', archives);
 
-        Object.values(archives).forEach((post) => posts.createIfNotExist(post.id, post.auteur, post.date_post, post.texte, nextPage ? nextPage.doc : null));
+        Object.values(archives).forEach((post) => {
+            posts.createIfNotExist(post.id, post.auteur, post.date_post, post.texte, nextPage ? nextPage.doc : null);
+            posts.guessPseudoDeleted(post.id, post.auteur.pseudo);
+        });
 
     } catch (e) {
         console.error('JVC Ghost error:', e);
