@@ -1,245 +1,158 @@
 // ==UserScript==
 // @name         Newfag detecor
-// @version      1.3
+// @version      2.0
 // @description  Affiche l'ancienneté des pseudos qui le cachent
 // @author       NocturneX
-// @match        http://www.jeuxvideo.com/profil/*?mode=infos
-// @match        https://www.jeuxvideo.com/profil/*?mode=infos
+// @match        *://www.jeuxvideo.com/profil/*?mode=infos
 // @grant        GM_xmlhttpRequest
 // @icon         http://image.noelshack.com/fichiers/2017/15/1491900495-7.png
 // @connect      api.jeuxvideo.com
+// @require      https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js
 // ==/UserScript==
 
+(() => {
+  if (document.querySelector('.img-erreur')) return;
 
-/*
-CryptoJS v3.0.2
-code.google.com/p/crypto-js
-(c) 2009-2012 by Jeff Mott. All rights reserved.
-code.google.com/p/crypto-js/wiki/License
-*/
-var CryptoJS=CryptoJS||function(h,i){var e={},f=e.lib={},l=f.Base=function(){function a(){}return{extend:function(j){a.prototype=this;var d=new a;j&&d.mixIn(j);d.$super=this;return d},create:function(){var a=this.extend();a.init.apply(a,arguments);return a},init:function(){},mixIn:function(a){for(var d in a)a.hasOwnProperty(d)&&(this[d]=a[d]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.$super.extend(this)}}}(),k=f.WordArray=l.extend({init:function(a,j){a=
-this.words=a||[];this.sigBytes=j!=i?j:4*a.length},toString:function(a){return(a||m).stringify(this)},concat:function(a){var j=this.words,d=a.words,c=this.sigBytes,a=a.sigBytes;this.clamp();if(c%4)for(var b=0;b<a;b++)j[c+b>>>2]|=(d[b>>>2]>>>24-8*(b%4)&255)<<24-8*((c+b)%4);else if(65535<d.length)for(b=0;b<a;b+=4)j[c+b>>>2]=d[b>>>2];else j.push.apply(j,d);this.sigBytes+=a;return this},clamp:function(){var a=this.words,b=this.sigBytes;a[b>>>2]&=4294967295<<32-8*(b%4);a.length=h.ceil(b/4)},clone:function(){var a=
-l.clone.call(this);a.words=this.words.slice(0);return a},random:function(a){for(var b=[],d=0;d<a;d+=4)b.push(4294967296*h.random()|0);return k.create(b,a)}}),o=e.enc={},m=o.Hex={stringify:function(a){for(var b=a.words,a=a.sigBytes,d=[],c=0;c<a;c++){var e=b[c>>>2]>>>24-8*(c%4)&255;d.push((e>>>4).toString(16));d.push((e&15).toString(16))}return d.join("")},parse:function(a){for(var b=a.length,d=[],c=0;c<b;c+=2)d[c>>>3]|=parseInt(a.substr(c,2),16)<<24-4*(c%8);return k.create(d,b/2)}},q=o.Latin1={stringify:function(a){for(var b=
-a.words,a=a.sigBytes,d=[],c=0;c<a;c++)d.push(String.fromCharCode(b[c>>>2]>>>24-8*(c%4)&255));return d.join("")},parse:function(a){for(var b=a.length,d=[],c=0;c<b;c++)d[c>>>2]|=(a.charCodeAt(c)&255)<<24-8*(c%4);return k.create(d,b)}},r=o.Utf8={stringify:function(a){try{return decodeURIComponent(escape(q.stringify(a)))}catch(b){throw Error("Malformed UTF-8 data");}},parse:function(a){return q.parse(unescape(encodeURIComponent(a)))}},b=f.BufferedBlockAlgorithm=l.extend({reset:function(){this._data=k.create();
-this._nDataBytes=0},_append:function(a){"string"==typeof a&&(a=r.parse(a));this._data.concat(a);this._nDataBytes+=a.sigBytes},_process:function(a){var b=this._data,d=b.words,c=b.sigBytes,e=this.blockSize,g=c/(4*e),g=a?h.ceil(g):h.max((g|0)-this._minBufferSize,0),a=g*e,c=h.min(4*a,c);if(a){for(var f=0;f<a;f+=e)this._doProcessBlock(d,f);f=d.splice(0,a);b.sigBytes-=c}return k.create(f,c)},clone:function(){var a=l.clone.call(this);a._data=this._data.clone();return a},_minBufferSize:0});f.Hasher=b.extend({init:function(){this.reset()},
-reset:function(){b.reset.call(this);this._doReset()},update:function(a){this._append(a);this._process();return this},finalize:function(a){a&&this._append(a);this._doFinalize();return this._hash},clone:function(){var a=b.clone.call(this);a._hash=this._hash.clone();return a},blockSize:16,_createHelper:function(a){return function(b,d){return a.create(d).finalize(b)}},_createHmacHelper:function(a){return function(b,d){return g.HMAC.create(a,d).finalize(b)}}});var g=e.algo={};return e}(Math);
-(function(h){var i=CryptoJS,e=i.lib,f=e.WordArray,e=e.Hasher,l=i.algo,k=[],o=[];(function(){function e(a){for(var b=h.sqrt(a),d=2;d<=b;d++)if(!(a%d))return!1;return!0}function f(a){return 4294967296*(a-(a|0))|0}for(var b=2,g=0;64>g;)e(b)&&(8>g&&(k[g]=f(h.pow(b,0.5))),o[g]=f(h.pow(b,1/3)),g++),b++})();var m=[],l=l.SHA256=e.extend({_doReset:function(){this._hash=f.create(k.slice(0))},_doProcessBlock:function(e,f){for(var b=this._hash.words,g=b[0],a=b[1],j=b[2],d=b[3],c=b[4],h=b[5],l=b[6],k=b[7],n=0;64>
-n;n++){if(16>n)m[n]=e[f+n]|0;else{var i=m[n-15],p=m[n-2];m[n]=((i<<25|i>>>7)^(i<<14|i>>>18)^i>>>3)+m[n-7]+((p<<15|p>>>17)^(p<<13|p>>>19)^p>>>10)+m[n-16]}i=k+((c<<26|c>>>6)^(c<<21|c>>>11)^(c<<7|c>>>25))+(c&h^~c&l)+o[n]+m[n];p=((g<<30|g>>>2)^(g<<19|g>>>13)^(g<<10|g>>>22))+(g&a^g&j^a&j);k=l;l=h;h=c;c=d+i|0;d=j;j=a;a=g;g=i+p|0}b[0]=b[0]+g|0;b[1]=b[1]+a|0;b[2]=b[2]+j|0;b[3]=b[3]+d|0;b[4]=b[4]+c|0;b[5]=b[5]+h|0;b[6]=b[6]+l|0;b[7]=b[7]+k|0},_doFinalize:function(){var e=this._data,f=e.words,b=8*this._nDataBytes,
-g=8*e.sigBytes;f[g>>>5]|=128<<24-g%32;f[(g+64>>>9<<4)+15]=b;e.sigBytes=4*f.length;this._process()}});i.SHA256=e._createHelper(l);i.HmacSHA256=e._createHmacHelper(l)})(Math);
-(function(){var h=CryptoJS,i=h.enc.Utf8;h.algo.HMAC=h.lib.Base.extend({init:function(e,f){e=this._hasher=e.create();"string"==typeof f&&(f=i.parse(f));var h=e.blockSize,k=4*h;f.sigBytes>k&&(f=e.finalize(f));for(var o=this._oKey=f.clone(),m=this._iKey=f.clone(),q=o.words,r=m.words,b=0;b<h;b++)q[b]^=1549556828,r[b]^=909522486;o.sigBytes=m.sigBytes=k;this.reset()},reset:function(){var e=this._hasher;e.reset();e.update(this._iKey)},update:function(e){this._hasher.update(e);return this},finalize:function(e){var f=
-this._hasher,e=f.finalize(e);f.reset();return f.finalize(this._oKey.clone().concat(e))}})})();
+  const searchAndDisplay = async (col) => {
+    const alreadyDisplayed = Array.from(document.querySelectorAll('.info-lib')).find((div) => div.textContent.trim() === 'Membre depuis :');
 
-(function() {
-	const PSEUDO_AVANT = 0, PSEUDO_APRES = 1;
-	// Récupère l'ID du pseudo
-    var idPseudo = 0;
-    // Si le bouton d'abonnement existe, on récupère l'id du pseudo dedans
-    // Sinon si le bouton de DDB existe, on récupère l'id du pseudo dedans
-    // Sinon on arrête le script
-    var iconBell = document.querySelector(".icon-bell-off");
-    if(iconBell) {
-        idPseudo = iconBell.getAttribute("data-id")
+    if (alreadyDisplayed) return;
+
+    const bell = document.querySelector('#header-profil .icon-bell-off');
+    const pictoAttention = document.querySelector('#header-profil .icon-report-problem');
+    let pseudoId;
+
+    if (bell) {
+      pseudoId = bell.dataset.id;
+    } else if (pictoAttention && /\/profil\/gta\.php\?id=([0-9]+)&/g.test(pictoAttention.dataset.selector)) {
+      pseudoId = RegExp.$1.trim();
     }
-    else {
-        let pictoAttention = document.querySelector(".picto-attention");
-        if(pictoAttention && /\/profil\/gta\.php\?id=([0-9]+)&/g.test(pictoAttention.getAttribute("data-selector"))) {
-            idPseudo = RegExp.$1;
-        } else if(document.querySelector(".icon-bell-on")) {
-            console.error("[Newfag detector] Impossible de récupérer l'ID du pseudo.");
-            return;
+
+    if (!pseudoId) {
+      throw new Error('Impossible de récupérer l\'id du pseudo');
+    }
+
+    pseudoId = parseInt(pseudoId, 10);
+
+    const createBloc = (html) => {
+      const div = document.createElement('div');
+      div.classList.add('bloc-default-profil');
+      div.innerHTML = `
+        <div class="bloc-default-profil-header">
+          <h2>Newfag Detector</h2>
+        </div>
+        <div class="bloc-default-profil-body">
+          ${html}
+        </div>`;
+      col.appendChild(div);
+    };
+
+    const createBlocError = (message) => createBloc(`<p style="margin-left: 10px;">${message || 'La date de création du pseudo n\'a pas pu être estimée.'}</p>`);
+
+    const requestApiJvc = (url) => new Promise((resolve, reject) => {
+      const timestamp = new Date().toISOString();
+      const method = 'GET';
+      const signature = CryptoJS.HmacSHA256(`550c04bf5cb2b\n${timestamp}\n${method}\napi.jeuxvideo.com\n/v3/${url}\n`, 'd84e9e5f191ea4ffc39c22d11c77dd6c');
+      const header = `PartnerKey=550c04bf5cb2b, Signature=${signature}, Timestamp=${timestamp}`;
+      GM_xmlhttpRequest({
+        method,
+        headers: {
+          'Jvc-Authorization': header,
+          'Content-Type': 'application/json',
+        },
+        url: `https://api.jeuxvideo.com/v3/${url}`,
+        onload: (response) => resolve(JSON.parse(response.responseText)),
+        onerror: (response) => reject(response),
+      });
+    });
+
+    if (pseudoId <= 2499961) {
+      createBlocError('Ce pseudo a été créé avant le 16 février 2010.<br>La date exacte n\'a pas pu être estimée.');
+      return;
+    }
+
+    const searchDate = async (direction) => {
+      const maxTry = 20;
+      let date = null;
+      for (let i = 1; i <= maxTry; i += 1) {
+        try {
+          const id = pseudoId + (i * direction);
+          console.log('Newfag Detector: Requête le pseudo n°', id);
+          const profile = await requestApiJvc(`accounts/${id}/profile`);
+          if (profile.info && profile.info.creationDate) {
+            date = new Date(profile.info.creationDate);
+            console.log('Newfag Detector: Date trouvée', date, 'pour le pseudo', id, profile.alias);
+            break;
+          }
+        } catch (e) {
+          console.log('Newfag Detector: Erreur requête', e);
         }
+      }
+      return date;
+    };
+
+    const daysBetween = (date1, date2) => Math.round(Math.abs((date1.getTime() - date2.getTime()) / (24 * 60 * 60 * 1000)));
+
+    const displayNumber = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    const displayDate = (date) => new Date(date).toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    const dateBefore = await searchDate(-1);
+    const dateAfter = await searchDate(1);
+
+    if (!dateBefore) {
+      createBlocError();
+      throw new Error('Impossible de récupérer la date de création du pseudo avant');
     }
-	idPseudo = parseInt(idPseudo);
-	if(idPseudo < 3000000)
-		return; // Pseudo trop vieux...
-	///////////////////////////
 
-	// Vérifie si le pseudo est banni
-	let msg_ban = document.querySelector(".alert-row");
-	if(msg_ban !== null){
-		if(msg_ban.innerHTML.trim() === "Le pseudo est banni.")
-		{
-			// Si banni, on lance que si le scipt JVCDV est présent
-			addEventListener("jvcdv:done", function(r){
-				if(r.detail.assume === false)
-					main();
-			});
-		}
-		else
-			main();
-	}
-	else
-		main();
-	//////////////////////////////////
+    if (!dateAfter) {
+      createBlocError();
+      throw new Error('Impossible de récupérer la date de création du pseudo après');
+    }
 
-	function main() {
-	// Vérifie si le pseudo assume ou pas son nombre de jour...
-	let assume = false;
-	document.querySelectorAll(".info-lib").forEach(function (el) {
-		if(el.innerHTML.trim() == "Membre depuis :")
-			assume = true;
-	});
-	if(assume)
-		return; // Si il assume, on arrête le script.
-	/////////////////////////////////////////////////////////////
+    const dateBeforeFormated = displayDate(dateBefore);
+    const dateAfterFormated = displayDate(dateAfter);
 
-	// Si il n'assume pas, on peut continuer :
-	let avant = 1, après = 1;
-	let dateAvant = "", dateAprès = "", nbAvant = 0, nbAprès = 0, déjàTrouver = false;
-	function chercher(avantOuAprès)
-	{
-		let id = idPseudo;
-		if(avantOuAprès == PSEUDO_AVANT) {
-			id = id-avant;
-			avant++;
-		}
-		else if(avantOuAprès == PSEUDO_APRES) {
-			id = id+après;
-			après++;
-		}
-		else return;
-		requeteJvcApi("accounts/"+id+"/profile", undefined, function (r) {
-			let json = JSON.parse(r);
-			if(json.info !== undefined && json.info.creationDate !== undefined)
-			{
-				if(avantOuAprès == PSEUDO_AVANT) {
-					dateAvant = json.info.creationDate;
-					nbAvant = json.info.creationSince;
-					console.log('%c[NEWFAG DETECTOR] [PSEUDO CREE AVANT] %c('+id+") " + json.alias + " " + dateJVC(json.info.creationDate) + " ("+json.info.creationSince+" jours)", 'background: #1d1d1d; color: #ff002d; font-size: 1.3em;', 'font-size: 1.3em; background: #1d1d1d; color: white');
-				}
-				else if(avantOuAprès == PSEUDO_APRES) {
-					dateAprès = json.info.creationDate;
-					nbAprès = json.info.creationSince;
-					console.log('%c[NEWFAG DETECTOR] [PSEUDO CREE APRES] %c('+id+") " + json.alias + " " + dateJVC(json.info.creationDate) + " ("+json.info.creationSince+" jours)", 'background: #1d1d1d; color: #ff002d; font-size: 1.3em;', 'font-size: 1.3em; background: #1d1d1d; color: white');
-				}
-				if(dateAvant !== "" && dateAprès !== "" && !déjàTrouver)
-					trouvé();
-			}
-			else
-			{
-				chercher(avantOuAprès);
-			}
-		});
-	}
+    if (dateBeforeFormated !== dateAfterFormated) {
+      console.log('Newfag Detector: Les deux dates ne correspondent pas', dateBeforeFormated, dateAfterFormated);
+      createBlocError();
+      return;
+    }
 
-	chercher(PSEUDO_AVANT);
-	chercher(PSEUDO_APRES);
+    const nbDays = daysBetween(dateBefore, new Date());
 
-	function trouvé() {
-		déjàTrouver = true;
-		let depuis = "";
-		//console.log(dateJVC(dateAvant), nbAvant, dateJVC(dateAprès), nbAprès);
-		if(dateJVC(dateAvant) == dateJVC(dateAprès))
-		{
-			depuis = dateJVC(dateAvant) + " ("+nbAvant+" jours)";
-		}
-		else
-		{
-			let timeAv = new Date(dateAvant), timeAp = new Date(dateAprès);
-			let environ = moyenne(timeAv.getTime(), timeAp.getTime());
-			let dateEnviron = new Date(environ);
-			depuis = `<span title="environ">~</span>` + dateJVC(dateEnviron.toISOString()) + " ("+(nbAvant != nbAprès ? ("<span title=\"environ\">~</span>"+moyenne(nbAvant, nbAprès)) : nbAvant)+" jours)";
-		}
-		document.querySelectorAll(".col-md-6")[0].innerHTML += `
-<div class="bloc-default-profil">
-<div class="header">
-<h2>Assume ton ancienneté !</h2>
-</div>
-<div class="body">
-<ul class="display-line-lib">
-<li><div class="info-lib">Membre depuis :</div><div class="info-value">${depuis}</div></li>
-</ul>
-</div>
-</div>
-`;
-	}
+    createBloc(`
+      <ul class="display-line-lib">
+        <li>
+          <div class="info-lib">Membre depuis :</div>
+          <div class="info-value">${dateBeforeFormated} (${displayNumber(nbDays)} jours)</div>
+        </li>
+      </ul>`);
+  };
 
-	// Fonction qui permet d'accéder à l'API JVC (fonction d'origne PHP que j'ai traduit en Javascript GM)
-	function requeteJvcApi(url, donnees, callback) {
-		var ts = new Date(Date.now()).toISOString();
-		var methode = donnees === undefined ? "GET" : "POST";
-		var signature = "550c04bf5cb2b\n" + ts + "\n" + methode + "\napi.jeuxvideo.com\n/v3/" + url + "\n";
-		signature = CryptoJS.HmacSHA256(signature, "d84e9e5f191ea4ffc39c22d11c77dd6c");
-		var header = "PartnerKey=550c04bf5cb2b, Signature=" + signature + ", Timestamp=" + ts;
-		var req = {
-			method: methode,
-			headers: {
-				'Jvc-Authorization': header,
-				'Content-Type': 'application/json'
-			},
-			url: 'https://api.jeuxvideo.com/v3/' + url,
-			onload: function(response) {
-				callback(response.responseText);
-			}
-		};
-		if(donnees !== undefined)
-		{
-			let data = '';
-			for (var i in donnees) {
-				if (donnees.hasOwnProperty(i)) {
-					data += i+"="+donnees[i]+"&";
-				}
-			}
-			req.data = data.substring(0, data.length - 1) + ";";
-		}
-		GM_xmlhttpRequest(req);
-	}
-	////////////////////////////////////
+  const alertDanger = document.querySelector('#page-profil .alert.alert-danger');
+  if (alertDanger && alertDanger.textContent.trim() === 'Le pseudo est banni.') {
+    setTimeout(() => {
+      const jvcdvBody = document.querySelector('.jvcdv-body');
 
-	// Date JVC
-	function dateJVC(date)
-	{
-		let d = new Date(date);
-		let r = d.getDate()+" ";
-		let m = d.getMonth()+1;
-		switch (m) {
-			case 0:
-				r += " ";
-				break;
-			case 1:
-				r += "janvier";
-				break;
-			case 2:
-				r += "février";
-				break;
-			case 3:
-				r += "mars";
-				break;
-			case 4:
-				r += "avril";
-				break;
-			case 5:
-				r += "mai";
-				break;
-			case 6:
-				r += "juin";
-				break;
-			case 7:
-				r += "juillet";
-				break;
-			case 8:
-				r += "août";
-				break;
-			case 9:
-				r += "septembre";
-				break;
-			case 10:
-				r += "octobre";
-				break;
-			case 11:
-				r += "novembre";
-				break;
-			case 12:
-				r += "décembre";
-		}
-		r += " " + d.getUTCFullYear();
-		return r;
-	}
-	////////////
+      if (!jvcdvBody) return;
 
-	function moyenne(nb1, nb2)
-	{
-		return Math.round((nb1+nb2)/2);
-	}
-}
+      let col = jvcdvBody.querySelector('.col-md-6');
+
+      if (!col) {
+        col = document.createElement('div');
+        col.classList.add('col-md-6');
+        jvcdvBody.after(col);
+      }
+
+      searchAndDisplay(col);
+    }, 2000);
+    return;
+  }
+
+  searchAndDisplay(document.querySelector('#page-profil > .layout__content > .row > .col-md-6'));
 })();
